@@ -97,6 +97,7 @@ class ProgressStep extends Component {
       />
     );
 
+    return null;
     return (
       <View style={{ flex: 1 }}>
         {isScrollable

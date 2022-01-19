@@ -3,6 +3,25 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 class StepIcon extends Component {
+
+
+  onNextStep = async () => {
+    this.props.onNext && (await this.props.onNext());
+
+    // Return out of method before moving to next step if errors exist.
+    if (this.props.errors) {
+      return;
+    }
+
+    this.props.setActiveStep(this.props.activeStep + 1);
+  };
+
+  onPreviousStep = () => {
+    // Changes active index and calls previous function passed by parent
+    this.props.onPrevious && this.props.onPrevious();
+    this.props.setActiveStep(this.props.activeStep - 1);
+  };
+
   render() {
     let styles;
 
@@ -12,7 +31,7 @@ class StepIcon extends Component {
           width: 40,
           height: 40,
           borderRadius: 20,
-          backgroundColor: this.props.activeStepIconColor,
+          backgroundColor: this.props.completedStepIconColor,
           borderColor: this.props.activeStepIconBorderColor,
           borderWidth: 5,
           bottom: 2,
@@ -147,22 +166,21 @@ class StepIcon extends Component {
         },
       };
     }
-
     return (
-      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+      <TouchableOpacity onPress={() => this.props.click(this.props.stepNum)} style={{ flexDirection: 'column', alignItems: 'center' }}>
         <View style={styles.circleStyle}>
-          <Text style={styles.circleText}>
+          {/* <Text style={styles.circleText}>
             {this.props.isCompletedStep ? (
               <Text style={{ color: this.props.completedCheckColor }}>&#10003;</Text>
             ) : (
               <Text style={styles.stepNum}>{this.props.stepNum}</Text>
             )}
-          </Text>
+          </Text> */}
         </View>
         <Text style={styles.labelText}>{this.props.label}</Text>
         {!this.props.isFirstStep && <View style={styles.leftBar} />}
         {!this.props.isLastStep && <View style={styles.rightBar} />}
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -177,6 +195,8 @@ StepIcon.propTypes = {
   borderStyle: PropTypes.string,
   activeStepIconBorderColor: PropTypes.string,
 
+  click: PropTypes.func,
+  setActiveStep: PropTypes.func,
   progressBarColor: PropTypes.string,
   completedProgressBarColor: PropTypes.string,
 

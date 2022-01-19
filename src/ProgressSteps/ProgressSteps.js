@@ -38,6 +38,7 @@ class ProgressSteps extends Component {
             <StepIcon
               {...this.getChildProps()}
               stepNum={i + 1}
+              setActiveStep={this.setActiveStep}
               label={this.props.children[i].props.label}
               isFirstStep={i === 0}
               isLastStep={i === this.state.stepCount - 1}
@@ -96,6 +97,7 @@ ProgressSteps.propTypes = {
   activeStep: PropTypes.number,
   topOffset: PropTypes.number,
   marginBottom: PropTypes.number,
+  click:PropTypes.func
 };
 
 ProgressSteps.defaultProps = {
